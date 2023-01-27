@@ -117,7 +117,6 @@ DFhackCExport command_result plugin_shutdown(color_ostream &out)
 DFhackCExport command_result plugin_load_data(color_ostream &out)
 {
     config = World::GetPersistentData(CONFIG_KEY);
-    out.printerr("Ladies and gentlemen...\n");
 
     if (!config.isValid())
     {
@@ -193,7 +192,7 @@ static std::string get_last_name(df::unit *unit)
 // Couldn't figure out any other way to do this besides look for the dwarf name in
 // the slab item description.
 // Ideally, we could get the historical figure id from the slab but I didn't
-// see anything like that in the item struct
+// see anything like that in the item struct. This seems to work based on testing.
 // Confirmed nicknames don't show up in engraved slab names, so this should probably work okay
 bool engravedSlabItemExists(df::unit *unit, std::vector<df::item *> slabs)
 {
@@ -212,7 +211,7 @@ bool engravedSlabItemExists(df::unit *unit, std::vector<df::item *> slabs)
 // Queue up a single order to engrave the slab for the given unit
 static void createSlabJob(df::unit *unit)
 {
-    auto next_id = ++world->manager_order_next_id;
+    auto next_id = world->manager_order_next_id++;
     auto order = new df::manager_order();
 
     order->id = next_id;
@@ -251,7 +250,11 @@ static void checkslabs(color_ostream &out)
     {
         // Only create a job is the map has no existing jobs for that historical figure or no existing engraved slabs
         if (histToJob.count(ghost->hist_figure_id) == 0 && !engravedSlabItemExists(ghost, engravedSlabs))
+        {
             createSlabJob(ghost);
+            auto fullName = get_first_name(ghost) + " " + get_last_name(ghost);
+            out.print("Added slab order for ghost  %s\n", fullName.c_str());
+        }
     }
 }
 
