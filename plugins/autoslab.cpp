@@ -253,7 +253,7 @@ static void checkslabs(color_ostream &out)
         {
             createSlabJob(ghost);
             auto fullName = get_first_name(ghost) + " " + get_last_name(ghost);
-            out.print("Added slab order for ghost  %s\n", fullName.c_str());
+            out.print("Added slab order for ghost %s\n", fullName.c_str());
         }
     }
 }
