@@ -15,3 +15,6 @@ Usage
 
 ``enable autoslab``
     Enables the plugin and starts checking for ghosts that need memorializing.
+
+``disable autoslab``
+    Disables the plugin.
